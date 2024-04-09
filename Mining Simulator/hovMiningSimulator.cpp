@@ -90,15 +90,25 @@ void displayAllCaveData(Node *node){
     display(node);
 }
 
+int calculateMaxDepth(Node *node){
+    if(node == NULL){
+        return 0;
+    }
+
+    int leftGold = calculateMaxDepth(node->left);
+    int rightGold = calculateMaxDepth(node->right);
+    return (leftGold > rightGold) ? leftGold : rightGold;
+}
+
 int calculateTotalGold(Node *node, int depth){
     if(node == NULL){
         return 0;
     }
 
     if(node->depth == depth){
-        return (node->gold + calculateTotalGold(node->left, depth) + calculateTotalGold(node->right, depth));
+        return node->gold + calculateTotalGold(node->left, depth) + calculateTotalGold(node->right, depth);
     }else{
-        return (calculateTotalGold(node->left, depth) + calculateTotalGold(node->right, depth));
+        return calculateTotalGold(node->left, depth) + calculateTotalGold(node->right, depth);
     }
 }
 
@@ -112,10 +122,10 @@ void displayMiningReports(Node *node){
     Node *current = node;
     while (current != NULL){
         maxDepth++;
-        current = current->left;
+        current = current->right;
     }
 
-    for(int i = maxDepth; i > 0; i--){
+    for(int i = 1; i < maxDepth; i++){
         int totalGold = calculateTotalGold(node, i);
         if(totalGold > 0){
             printf(">> Total gold production for depth %d    is %d\n",
@@ -146,7 +156,7 @@ void mainMenu(){
 }
 
 void pressAnyKey(){
-    puts("Press any key to continue.");
+    puts("Press enter to continue.");
     getchar();
     getchar();
 }
