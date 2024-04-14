@@ -135,7 +135,7 @@ void displayMiningReports(Node *node){
 }
 
 void freeTree(Node *node){
-    if(node != NULL){
+    if(node == NULL){
         return;
     }
 
